@@ -8,7 +8,7 @@ interface QuestionCardProps {
   question: Question;
   questionNumber: number;
   totalQuestions: number;
-  onAnswer: (answer: string | string[], timeTaken: number) => void;
+  onAnswer: (answer: string | string[], timeTaken: number, isSkipped?: boolean) => void;
   className?: string;
 }
 
@@ -48,6 +48,11 @@ export const QuestionCard = ({
     } else if (selectedAnswer) {
       onAnswer(selectedAnswer, elapsedTime);
     }
+  };
+
+  const handleSkip = () => {
+    setIsSubmitting(true);
+    onAnswer("", elapsedTime, true);
   };
 
   const formatTime = (seconds: number) => {
@@ -226,8 +231,17 @@ export const QuestionCard = ({
           </div>
         )}
 
-        {/* Submit button */}
-        <div className="mt-8 flex justify-end">
+        {/* Submit and Skip buttons */}
+        <div className="mt-8 flex items-center justify-between">
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={handleSkip}
+            disabled={isSubmitting}
+            className="text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+          >
+            Skip Question
+          </Button>
           <Button
             variant="hero"
             size="lg"

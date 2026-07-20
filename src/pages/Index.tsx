@@ -47,35 +47,40 @@ const Index = () => {
     setAppState("assessment");
   };
 
-  const handleAnswer = (answer: string | string[], timeTaken: number) => {
+  const handleAnswer = (answer: string | string[], timeTaken: number, isSkipped?: boolean) => {
     const questions = getQuestionsForGrade(student?.grade || 3);
     const currentQuestion = questions[currentQuestionIndex];
 
     if (!currentQuestion) return;
 
-    const isCorrect = Array.isArray(currentQuestion.correctAnswer)
-      ? JSON.stringify(answer) === JSON.stringify(currentQuestion.correctAnswer)
-      : answer === currentQuestion.correctAnswer;
+    const isCorrect = isSkipped
+      ? false
+      : Array.isArray(currentQuestion.correctAnswer)
+        ? JSON.stringify(answer) === JSON.stringify(currentQuestion.correctAnswer)
+        : answer === currentQuestion.correctAnswer;
 
     const response: QuestionResponse = {
       questionId: currentQuestion.id,
-      selectedAnswer: answer,
+      selectedAnswer: isSkipped ? "" : answer,
       isCorrect,
       timeTaken,
       errorTag: isCorrect
         ? "none"
-        : timeTaken > currentQuestion.expectedTime
-          ? "slow-processing"
-          : "concept-gap",
+        : isSkipped
+          ? "none"
+          : timeTaken > currentQuestion.expectedTime
+            ? "slow-processing"
+            : "concept-gap",
     };
 
-    setResponses([...responses, response]);
+    const updatedResponses = [...responses, response];
+    setResponses(updatedResponses);
 
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       // Assessment complete - generate results
-      generateResults();
+      generateResults(updatedResponses);
     }
   };
 
@@ -84,10 +89,11 @@ const Index = () => {
     generateResults();
   };
 
-  const generateResults = () => {
+  const generateResults = (finalResponses?: QuestionResponse[]) => {
+    const activeResponses = finalResponses || responses;
     const gradeQuestions = getQuestionsForGrade(student?.grade || 3);
     const skillScores: SkillScore[] = SKILL_DEFINITIONS.map((skill) => {
-      const skillResponses = responses.filter((r) => {
+      const skillResponses = activeResponses.filter((r) => {
         const question = gradeQuestions.find((q) => q.id === r.questionId);
         return question?.skillCode === skill.code;
       });
@@ -163,7 +169,7 @@ const Index = () => {
       totalTime,
       skillScores,
       learnerType,
-      responses,
+      responses: activeResponses,
       recommendations,
     };
 
