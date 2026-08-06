@@ -157,7 +157,7 @@ export const OnboardingForm = ({ onComplete, className }: OnboardingFormProps) =
                   <SelectContent>
                     {grades.map((grade) => (
                       <SelectItem key={grade.toString()} value={grade.toString()}>
-                        {grade === "NEET" ? "NEET Practice Test" : `Grade ${grade}`}
+                        {grade === "NEET" ? "NEET" : `Grade ${grade}`}
                       </SelectItem>
                     ))}
                   </SelectContent>

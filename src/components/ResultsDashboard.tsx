@@ -126,7 +126,7 @@ export const ResultsDashboard = ({ result, student, onRetake, className }: Resul
             <div className="h-8 w-px bg-primary-foreground/20 mx-1" />
             <div>
               <h2 className="font-heading text-lg font-bold">Assessment Results</h2>
-              <p className="text-primary-foreground/70 text-xs">{student.name} · {student.grade === "NEET" ? "NEET Practice Test" : `Grade ${student.grade}`}</p>
+              <p className="text-primary-foreground/70 text-xs">{student.name} · {student.grade === "NEET" ? "NEET" : `Grade ${student.grade}`}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
