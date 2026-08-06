@@ -89,7 +89,7 @@ export const QuestionCard = ({
               difficultyColors[question.difficultyBand]
             )}
           >
-            {question.difficultyBand} grade
+            {question.grade === "NEET" ? "NEET Level" : `${question.difficultyBand} grade`}
           </span>
         </div>
         <div

@@ -150,7 +150,7 @@ export const generatePDFReport = async (
       sf("bold", F.small, C.navy);
       tL(isNewSection ? title : `${title} (continued)`, M + 2, 11);
       sf("normal", F.caption, C.g600);
-      tR(`${trunc(student.name, 28)} · Grade ${student.grade}`, PW - M, 11);
+      tR(`${trunc(student.name, 28)} · ${student.grade === "NEET" ? "NEET" : `Grade ${student.grade}`}`, PW - M, 11);
       if (logoB64) doc.addImage(logoB64, "JPEG", PW / 2 - 6, 1.5, 12, 12);
       y = 23;
     };
@@ -247,7 +247,7 @@ export const generatePDFReport = async (
 
     strokeRect(M, y, infoW, cardH, C.white, C.navy, 0.5, 3);
     sf("bold", F.h2, C.navy);      tL(trunc(student.name, 28), M + 8, y + 11);
-    sf("normal", F.small, C.g600); tL(`Grade ${student.grade}`, M + 8, y + 19);
+    sf("normal", F.small, C.g600); tL(student.grade === "NEET" ? "NEET Practice Test" : `Grade ${student.grade}`, M + 8, y + 19);
     if (student.school) { sf("normal", F.caption, C.g600); tL(trunc(student.school, 36), M + 8, y + 27); }
     sf("normal", F.caption, C.g500); tL(`Report generated: ${completedAt.toLocaleDateString("en-IN")}`, M + 8, y + 33);
 

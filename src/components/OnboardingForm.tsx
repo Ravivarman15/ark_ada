@@ -27,7 +27,7 @@ export const OnboardingForm = ({ onComplete, className }: OnboardingFormProps) =
     school: "",
   });
 
-  const grades: Grade[] = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const grades: Grade[] = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "NEET"];
 
   const handleNext = () => {
     if (step < 2) {
@@ -148,7 +148,7 @@ export const OnboardingForm = ({ onComplete, className }: OnboardingFormProps) =
                 <Select
                   value={formData.grade?.toString()}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, grade: parseInt(value) as Grade })
+                    setFormData({ ...formData, grade: value === "NEET" ? "NEET" : (parseInt(value) as Grade) })
                   }
                 >
                   <SelectTrigger className="h-12 text-lg border-2 border-border/80 focus:ring-primary/20 focus:border-primary transition-all duration-200">
@@ -156,8 +156,8 @@ export const OnboardingForm = ({ onComplete, className }: OnboardingFormProps) =
                   </SelectTrigger>
                   <SelectContent>
                     {grades.map((grade) => (
-                      <SelectItem key={grade} value={grade.toString()}>
-                        Grade {grade}
+                      <SelectItem key={grade.toString()} value={grade.toString()}>
+                        {grade === "NEET" ? "NEET Practice Test" : `Grade ${grade}`}
                       </SelectItem>
                     ))}
                   </SelectContent>
